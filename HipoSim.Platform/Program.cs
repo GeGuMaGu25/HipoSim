@@ -1,5 +1,10 @@
 using HipoSim.Platform.Simulation.Application.UseCases;
 using HipoSim.Platform.Simulation.Domain.Services;
+using Microsoft.EntityFrameworkCore;
+using HipoSim.Platform.Shared.Infrastructure.Persistence.EFC.Configuration;
+using HipoSim.Platform.LeadManagement.Domain.Model.Repositories;
+using HipoSim.Platform.LeadManagement.Infrastructure.Persistence.EFC.Repositories;
+using HipoSim.Platform.LeadManagement.Application.UseCases;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -10,6 +15,9 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddScoped<ISimulationCalculator, FrenchAmortizationCalculator>();
 builder.Services.AddScoped<ISimulateCreditUseCase, SimulateCreditUseCase>();
 
+builder.Services.AddScoped<ICreditLeadRepository, CreditLeadRepository>();
+builder.Services.AddScoped<ISaveCreditLeadUseCase, SaveCreditLeadUseCase>();
+
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowFrontend", policy =>
@@ -18,6 +26,16 @@ builder.Services.AddCors(options =>
             .AllowAnyHeader()
             .AllowAnyMethod();
     });
+});
+
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+
+builder.Services.AddDbContext<AppDbContext>(options =>
+{
+    options.UseNpgsql(connectionString)
+        .LogTo(Console.WriteLine, LogLevel.Information)
+        .EnableSensitiveDataLogging()
+        .EnableDetailedErrors();
 });
 
 var app = builder.Build();
