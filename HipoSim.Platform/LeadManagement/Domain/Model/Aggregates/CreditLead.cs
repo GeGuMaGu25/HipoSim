@@ -12,6 +12,7 @@ public class CreditLead
     public decimal LoanAmount { get; private set; }
     public decimal MonthlyPayment { get; private set; }
     public string Currency { get; private set; }
+    public string Status { get; private set; }
     public DateTime CreatedAt { get; private set; }
 
     protected CreditLead()
@@ -30,6 +31,12 @@ public class CreditLead
         LoanAmount = loanAmount;
         MonthlyPayment = monthlyPayment;
         Currency = currency;
+        Status = "Pending";
         CreatedAt = DateTime.UtcNow;
+    }
+    
+    public void UpdateStatus(string newStatus)
+    {
+        Status = newStatus;
     }
 }

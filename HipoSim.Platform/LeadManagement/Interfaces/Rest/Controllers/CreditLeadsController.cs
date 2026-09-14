@@ -43,4 +43,25 @@ public class CreditLeadsController : ControllerBase
         var leads = await _getAllCreditLeadsUseCase.ExecuteAsync();
         return Ok(leads);
     }
+    
+    [HttpGet("metrics")]
+    public async Task<IActionResult> GetMetrics([FromServices] GetDashboardMetricsUseCase useCase)
+    {
+        var metrics = await useCase.ExecuteAsync();
+        return Ok(metrics);
+    }
+
+    [HttpPatch("{id}/status")]
+    public async Task<IActionResult> UpdateStatus(Guid id, [FromBody] UpdateLeadStatusRequest request, [FromServices] UpdateLeadStatusUseCase useCase)
+    {
+        try
+        {
+            await useCase.ExecuteAsync(id, request.NewStatus);
+            return Ok(new { message = "Estado actualizado correctamente." });
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(new { error = ex.Message });
+        }
+    }
 }
