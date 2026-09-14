@@ -18,6 +18,8 @@ builder.Services.AddScoped<ISimulateCreditUseCase, SimulateCreditUseCase>();
 builder.Services.AddScoped<ICreditLeadRepository, CreditLeadRepository>();
 builder.Services.AddScoped<ISaveCreditLeadUseCase, SaveCreditLeadUseCase>();
 
+builder.Services.AddScoped<IGetAllCreditLeadsUseCase, GetAllCreditLeadsUseCase>();
+
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowFrontend", policy =>

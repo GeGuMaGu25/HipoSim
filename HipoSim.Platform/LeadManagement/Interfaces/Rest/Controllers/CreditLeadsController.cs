@@ -11,10 +11,14 @@ namespace HipoSim.Platform.LeadManagement.Interfaces.Rest.Controllers;
 public class CreditLeadsController : ControllerBase
 {
     private readonly ISaveCreditLeadUseCase _saveCreditLeadUseCase;
+    private readonly IGetAllCreditLeadsUseCase _getAllCreditLeadsUseCase;
 
-    public CreditLeadsController(ISaveCreditLeadUseCase saveCreditLeadUseCase)
+    public CreditLeadsController(
+        ISaveCreditLeadUseCase saveCreditLeadUseCase, 
+        IGetAllCreditLeadsUseCase getAllCreditLeadsUseCase)
     {
         _saveCreditLeadUseCase = saveCreditLeadUseCase;
+        _getAllCreditLeadsUseCase = getAllCreditLeadsUseCase;
     }
 
     [HttpPost]
@@ -29,5 +33,12 @@ public class CreditLeadsController : ControllerBase
         {
             return StatusCode(500, new { error = "Ocurrió un error al guardar el lead", details = ex.Message });
         }
+    }
+
+    [HttpGet]
+    public async Task<IActionResult> GetAllLeads()
+    {
+        var leads = await _getAllCreditLeadsUseCase.ExecuteAsync();
+        return Ok(leads);
     }
 }

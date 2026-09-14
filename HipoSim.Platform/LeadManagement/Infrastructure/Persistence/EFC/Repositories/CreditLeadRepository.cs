@@ -1,4 +1,6 @@
 ﻿using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
 using HipoSim.Platform.LeadManagement.Domain.Model.Aggregates;
 using HipoSim.Platform.LeadManagement.Domain.Model.Repositories;
 using HipoSim.Platform.Shared.Infrastructure.Persistence.EFC.Configuration;
@@ -17,6 +19,11 @@ public class CreditLeadRepository : ICreditLeadRepository
     public async Task AddAsync(CreditLead lead)
     {
         await _context.CreditLeads.AddAsync(lead);
+    }
+    
+    public async Task<IEnumerable<CreditLead>> ListAsync()
+    {
+        return await _context.CreditLeads.ToListAsync();
     }
 
     public async Task SaveChangesAsync()
