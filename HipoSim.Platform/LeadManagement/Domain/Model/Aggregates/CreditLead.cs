@@ -5,6 +5,7 @@ namespace HipoSim.Platform.LeadManagement.Domain.Model.Aggregates;
 public class CreditLead
 {
     public Guid Id { get; private set; }
+    public Guid ProjectId { get; private set; }
     public string CustomerEmail { get; private set; }
     public decimal PropertyValue { get; private set; }
     public decimal DownPayment { get; private set; }
@@ -19,9 +20,10 @@ public class CreditLead
         Currency = null!;
     }
 
-    public CreditLead(string customerEmail, decimal propertyValue, decimal downPayment, decimal loanAmount, decimal monthlyPayment, string currency)
+    public CreditLead(Guid projectId, string customerEmail, decimal propertyValue, decimal downPayment, decimal loanAmount, decimal monthlyPayment, string currency)
     {
         Id = Guid.NewGuid();
+        ProjectId = projectId;
         CustomerEmail = customerEmail;
         PropertyValue = propertyValue;
         DownPayment = downPayment;

@@ -12,6 +12,9 @@ using HipoSim.Platform.IAM.Infrastructure.Tokens;
 using HipoSim.Platform.IAM.Domain.Model.Repositories;
 using HipoSim.Platform.IAM.Infrastructure.Persistence.EFC.Repositories;
 using HipoSim.Platform.IAM.Application.UseCases;
+using HipoSim.Platform.PropertyCatalog.Domain.Model.Repositories;
+using HipoSim.Platform.PropertyCatalog.Infrastructure.Persistence.EFC.Repositories;
+using HipoSim.Platform.PropertyCatalog.Application.UseCases;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -80,6 +83,10 @@ builder.Services.AddScoped<IUserRepository, UserRepository>();
 
 builder.Services.AddScoped<SignUpUseCase>();
 builder.Services.AddScoped<SignInUseCase>();
+
+builder.Services.AddScoped<IProjectRepository, ProjectRepository>();
+builder.Services.AddScoped<CreateProjectUseCase>();
+builder.Services.AddScoped<GetAllProjectsUseCase>();
 
 var app = builder.Build();
 
