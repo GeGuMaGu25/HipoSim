@@ -32,7 +32,8 @@ public class GetAllCreditLeadsUseCase : IGetAllCreditLeadsUseCase
             lead.LoanAmount,
             lead.MonthlyPayment,
             lead.Currency,
-            lead.CreatedAt
+            lead.CreatedAt,
+            lead.Status
         ));
     }
 }
