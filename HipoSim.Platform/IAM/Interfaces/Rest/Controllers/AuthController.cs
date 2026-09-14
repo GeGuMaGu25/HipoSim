@@ -1,6 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc;
 using HipoSim.Platform.IAM.Application.DataTransferObjects;
-using HipoSim.Platform.IAM.Infrastructure.Tokens;
+using HipoSim.Platform.IAM.Application.UseCases;
 
 namespace HipoSim.Platform.IAM.Interfaces.Rest.Controllers;
 
@@ -8,23 +10,40 @@ namespace HipoSim.Platform.IAM.Interfaces.Rest.Controllers;
 [Route("api/v1/[controller]")]
 public class AuthController : ControllerBase
 {
-    private readonly TokenService _tokenService;
+    private readonly SignUpUseCase _signUpUseCase;
+    private readonly SignInUseCase _signInUseCase;
 
-    public AuthController(TokenService tokenService)
+    public AuthController(SignUpUseCase signUpUseCase, SignInUseCase signInUseCase)
     {
-        _tokenService = tokenService;
+        _signUpUseCase = signUpUseCase;
+        _signInUseCase = signInUseCase;
+    }
+
+    [HttpPost("sign-up")]
+    public async Task<IActionResult> SignUp([FromBody] SignUpRequest request)
+    {
+        try
+        {
+            var message = await _signUpUseCase.ExecuteAsync(request);
+            return Ok(new { message });
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(new { error = ex.Message });
+        }
     }
 
     [HttpPost("sign-in")]
-    public IActionResult SignIn([FromBody] SignInRequest request)
+    public async Task<IActionResult> SignIn([FromBody] SignInRequest request)
     {
-        // Validación de administrador estático para este MVP
-        if (request.Email == "admin@hiposim.com" && request.Password == "admin123")
+        try
         {
-            var token = _tokenService.GenerateToken(request.Email);
-            return Ok(new SignInResponse(token, "Autenticación exitosa"));
+            var response = await _signInUseCase.ExecuteAsync(request);
+            return Ok(response);
         }
-
-        return Unauthorized(new { error = "Credenciales inválidas" });
+        catch (UnauthorizedAccessException ex)
+        {
+            return Unauthorized(new { error = ex.Message });
+        }
     }
 }

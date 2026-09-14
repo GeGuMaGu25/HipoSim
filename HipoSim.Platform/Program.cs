@@ -9,6 +9,9 @@ using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using HipoSim.Platform.IAM.Infrastructure.Tokens;
+using HipoSim.Platform.IAM.Domain.Model.Repositories;
+using HipoSim.Platform.IAM.Infrastructure.Persistence.EFC.Repositories;
+using HipoSim.Platform.IAM.Application.UseCases;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -72,6 +75,11 @@ builder.Services.AddAuthentication(options =>
 builder.Services.AddAuthorization();
 
 builder.Services.AddScoped<TokenService>();
+
+builder.Services.AddScoped<IUserRepository, UserRepository>();
+
+builder.Services.AddScoped<SignUpUseCase>();
+builder.Services.AddScoped<SignInUseCase>();
 
 var app = builder.Build();
 
