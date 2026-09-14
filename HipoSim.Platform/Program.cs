@@ -88,6 +88,9 @@ builder.Services.AddScoped<IProjectRepository, ProjectRepository>();
 builder.Services.AddScoped<CreateProjectUseCase>();
 builder.Services.AddScoped<GetAllProjectsUseCase>();
 
+builder.Services.AddScoped<GetDashboardMetricsUseCase>();
+builder.Services.AddScoped<UpdateLeadStatusUseCase>();
+
 var app = builder.Build();
 
 if (app.Environment.IsDevelopment())

@@ -26,6 +26,7 @@ public class AppDbContext : DbContext
         modelBuilder.Entity<CreditLead>().Property(l => l.CustomerEmail).IsRequired().HasMaxLength(100);
         modelBuilder.Entity<CreditLead>().Property(l => l.Currency).IsRequired().HasMaxLength(3);
         modelBuilder.Entity<CreditLead>().Property(c => c.ProjectId).IsRequired();
+        modelBuilder.Entity<CreditLead>().Property(c => c.Status).IsRequired().HasMaxLength(50).HasDefaultValue("Pending");
         
         modelBuilder.Entity<User>().ToTable("Users");
         modelBuilder.Entity<User>().HasKey(u => u.Id);

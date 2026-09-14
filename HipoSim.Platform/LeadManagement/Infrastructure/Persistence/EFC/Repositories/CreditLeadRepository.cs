@@ -30,4 +30,9 @@ public class CreditLeadRepository : ICreditLeadRepository
     {
         await _context.SaveChangesAsync();
     }
+    
+    public async Task<CreditLead?> FindByIdAsync(Guid id)
+    {
+        return await _context.CreditLeads.FirstOrDefaultAsync(l => l.Id == id);
+    }
 }

@@ -7,5 +7,6 @@ public interface ICreditLeadRepository
 {
     Task AddAsync(CreditLead lead);
     Task<IEnumerable<CreditLead>> ListAsync();
+    Task<CreditLead?> FindByIdAsync(Guid id);
     Task SaveChangesAsync();
 }
