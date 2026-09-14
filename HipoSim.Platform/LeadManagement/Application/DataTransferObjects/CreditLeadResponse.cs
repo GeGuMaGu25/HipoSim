@@ -10,5 +10,6 @@ public record CreditLeadResponse(
     decimal LoanAmount,
     decimal MonthlyPayment,
     string Currency,
-    DateTime CreatedAt
+    DateTime CreatedAt,
+    string Status
 );
