@@ -23,6 +23,7 @@ public class SaveCreditLeadUseCase : ISaveCreditLeadUseCase
     public async Task<Guid> ExecuteAsync(SaveCreditLeadRequest request)
     {
         var lead = new CreditLead(
+            request.ProjectId,
             request.CustomerEmail,
             request.PropertyValue,
             request.DownPayment,
