@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using HipoSim.Platform.LeadManagement.Application.DataTransferObjects;
 using HipoSim.Platform.LeadManagement.Application.UseCases;
+using Microsoft.AspNetCore.Authorization;
 
 namespace HipoSim.Platform.LeadManagement.Interfaces.Rest.Controllers;
 
@@ -36,6 +37,7 @@ public class CreditLeadsController : ControllerBase
     }
 
     [HttpGet]
+    [Authorize]
     public async Task<IActionResult> GetAllLeads()
     {
         var leads = await _getAllCreditLeadsUseCase.ExecuteAsync();

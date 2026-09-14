@@ -5,6 +5,10 @@ using HipoSim.Platform.Shared.Infrastructure.Persistence.EFC.Configuration;
 using HipoSim.Platform.LeadManagement.Domain.Model.Repositories;
 using HipoSim.Platform.LeadManagement.Infrastructure.Persistence.EFC.Repositories;
 using HipoSim.Platform.LeadManagement.Application.UseCases;
+using System.Text;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using HipoSim.Platform.IAM.Infrastructure.Tokens;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -40,6 +44,35 @@ builder.Services.AddDbContext<AppDbContext>(options =>
         .EnableDetailedErrors();
 });
 
+var jwtSettings = builder.Configuration.GetSection("JwtSettings");
+var secretKey = jwtSettings["SecretKey"];
+
+builder.Services.AddAuthentication(options =>
+    {
+        options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+        options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+    })
+    .AddJwtBearer(options =>
+    {
+        options.RequireHttpsMetadata = false;
+        options.SaveToken = true;
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuerSigningKey = true,
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey!)),
+            ValidateIssuer = true,
+            ValidIssuer = jwtSettings["Issuer"],
+            ValidateAudience = true,
+            ValidAudience = jwtSettings["Audience"],
+            ValidateLifetime = true,
+            ClockSkew = TimeSpan.Zero
+        };
+    });
+
+builder.Services.AddAuthorization();
+
+builder.Services.AddScoped<TokenService>();
+
 var app = builder.Build();
 
 if (app.Environment.IsDevelopment())
@@ -49,8 +82,9 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-app.UseAuthorization();
 app.UseCors("AllowFrontend");
+app.UseAuthentication();
+app.UseAuthorization();
 app.MapControllers();
 
 app.Run();
