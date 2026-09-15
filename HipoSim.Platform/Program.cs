@@ -15,6 +15,8 @@ using HipoSim.Platform.IAM.Application.UseCases;
 using HipoSim.Platform.PropertyCatalog.Domain.Model.Repositories;
 using HipoSim.Platform.PropertyCatalog.Infrastructure.Persistence.EFC.Repositories;
 using HipoSim.Platform.PropertyCatalog.Application.UseCases;
+using HipoSim.Platform.EvaluationGateway.Application.ACL;
+using HipoSim.Platform.EvaluationGateway.Application.UseCases;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -90,6 +92,10 @@ builder.Services.AddScoped<GetAllProjectsUseCase>();
 
 builder.Services.AddScoped<GetDashboardMetricsUseCase>();
 builder.Services.AddScoped<UpdateLeadStatusUseCase>();
+
+builder.Services.AddScoped<IBankEvaluationAdapter, BankEvaluationAdapter>();
+
+builder.Services.AddScoped<EvaluateCreditRiskUseCase>();
 
 var app = builder.Build();
 
